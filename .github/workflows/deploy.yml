@@ -27,7 +27,7 @@ jobs:
 
       # Deploy bundle to Databricks workspace
       - name: Deploy Asset Bundle
-        run: databricks bundle destroy --target dev
+        run: databricks bundle destroy --target dev --auto-approve
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_CLIENT_ID: ${{ secrets.DATABRICKS_CLIENT_ID }}

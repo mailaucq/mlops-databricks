@@ -2,6 +2,7 @@
 import mlflow
 import pandas as pd
 from sklearn.metrics import mean_squared_error
+import numpy as np
 
 # Widgets for parameters
 dbutils.widgets.text("catalog", "main")
@@ -46,7 +47,7 @@ except Exception:
 
 # Evaluate challenger
 y_pred_chal = challenger_model.predict(X_val)
-rmse_chal = mean_squared_error(y_val, y_pred_chal, squared=False)
+rmse_chal = np.sqrt(mean_squared_error(y_val, y_pred_chal))
 print(f"Challenger (v{challenger_ver}) RMSE: {rmse_chal:.4f}")
 
 # Evaluate champion (if exists) and compare
@@ -56,7 +57,7 @@ if champion_model is None:
     promote = True
 else:
     y_pred_champ = champion_model.predict(X_val)
-    rmse_champ = mean_squared_error(y_val, y_pred_champ, squared=False)
+    rmse_champ = np.sqrt(mean_squared_error(y_val, y_pred_champ))
     print(f"Champion (v{champion_ver}) RMSE: {rmse_champ:.4f}")
     
     # Promote if challenger RMSE is lower (better)

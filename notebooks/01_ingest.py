@@ -22,6 +22,7 @@ processed_df = (
     trips_df
     .filter(col("fare_amount") > 0)
     .filter(col("trip_distance") > 0)
+    .dropna(subset=["tolls_amount", "trip_distance", "fare_amount", "pickup_datetime", "dropoff_datetime", "pickup_zip", "dropoff_zip", "payment_type"])
     .select(
         col("tolls_amount"),
         col("trip_distance"),

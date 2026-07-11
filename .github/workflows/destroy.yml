@@ -1,11 +1,11 @@
-name: Deploy Databricks Asset Bundle
+name: Destroy Databricks Asset Bundle
 
 on:
   workflow_dispatch:
 
 jobs:
   deploy:
-    name: Validate and Deploy Bundle
+    name: Validate and Destroy Bundle
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -26,7 +26,7 @@ jobs:
 
       # Deploy bundle to Databricks workspace
       - name: Deploy Asset Bundle
-        run: databricks bundle deploy --target dev
+        run: databricks bundle destroy --target dev
         env:
           DATABRICKS_HOST: ${{ secrets.DATABRICKS_HOST }}
           DATABRICKS_TOKEN: ${{ secrets.DATABRICKS_TOKEN }}

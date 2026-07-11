@@ -40,6 +40,7 @@ else:
     # Run batch predictions
     predictions = champion_model.predict(X)
     df_pandas["prediction"] = predictions
+    df_pandas["model_id"] = "nyctaxi_model"
     
     # We simulate ground truth (actual fare_amount) arriving after the ride.
     # We add minor random noise to mock real labels for performance monitoring.

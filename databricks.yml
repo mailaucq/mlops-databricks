@@ -81,8 +81,9 @@ resources:
       assets_dir: /Shared/taxi_mlops_monitoring
       output_schema_name: ${var.catalog}.${var.schema}
       inference_log:
-        problem_type: regression
+        problem_type: PROBLEM_TYPE_REGRESSION
         prediction_col: prediction
         label_col: fare_amount
         timestamp_col: pickup_datetime
+        model_id_col: model_id
         granularities: [ "1 day" ]

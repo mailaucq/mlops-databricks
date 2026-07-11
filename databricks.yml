@@ -72,7 +72,6 @@ resources:
       environments:
         - environment_key: default
           spec:
-            client: default
             environment_version: '2'
 
 

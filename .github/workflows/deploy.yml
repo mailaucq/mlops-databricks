@@ -1,11 +1,7 @@
 name: Deploy Databricks Asset Bundle
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'databricks/**'
+  workflow_dispatch:
 
 jobs:
   deploy:

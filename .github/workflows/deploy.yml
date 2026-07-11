@@ -7,11 +7,6 @@ jobs:
   deploy:
     name: Validate and Deploy Bundle
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./databricks
-
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4

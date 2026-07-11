@@ -13,8 +13,10 @@ import numpy as np
 # Widgets for parameters
 dbutils.widgets.text("catalog", "main")
 dbutils.widgets.text("schema", "default")
+dbutils.widgets.text("experiment_name", "/Shared/taxi_mlops_experiment")
 catalog = dbutils.widgets.get("catalog")
 schema = dbutils.widgets.get("schema")
+experiment_name = dbutils.widgets.get("experiment_name")
 
 model_name = f"{catalog}.{schema}.nyctaxi_model"
 
@@ -23,13 +25,22 @@ print(f"Training NYC Taxi model. Registering to: {model_name}...")
 # Configure MLflow to use Unity Catalog for the Model Registry
 mlflow.set_registry_uri("databricks-uc")
 
+try:
+    exp = mlflow.get_experiment_by_name(experiment_name)
+    if exp is None:
+        mlflow.create_experiment(name=experiment_name)
+except Exception as e:
+    print(f"Skipped programmatically creating experiment: {e}")
+
+mlflow.set_experiment(experiment_name)
+
 # Load reference dataset
 ref_table = f"{catalog}.{schema}.nyctaxi_reference"
 df = spark.table(ref_table).toPandas()
 
 # Preprocess features
-NUMERIC = ["tolls_amount", "trip_distance"]
-CATEGORICAL = ["pickup_zip", "dropoff_zip", "payment_type"]
+NUMERIC = ["trip_distance"]
+CATEGORICAL = ["pickup_zip", "dropoff_zip"]
 target_col = "fare_amount"
 
 X = df[NUMERIC + CATEGORICAL]

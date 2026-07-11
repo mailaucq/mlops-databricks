@@ -33,8 +33,8 @@ else:
     # Convert features to Pandas for inference
     df_pandas = current_df.toPandas()
     
-    NUMERIC = ["tolls_amount", "trip_distance"]
-    CATEGORICAL = ["pickup_zip", "dropoff_zip", "payment_type"]
+    NUMERIC = ["trip_distance"]
+    CATEGORICAL = ["pickup_zip", "dropoff_zip"]
     X = df_pandas[NUMERIC + CATEGORICAL]
     
     # Run batch predictions

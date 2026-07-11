@@ -8,6 +8,10 @@ variables:
   schema:
     description: Unity Catalog schema name
     default: default
+  experiment_name:
+    description: MLflow Experiment Name
+    default: "/Shared/taxi_mlops_experiment"
+
 
 targets:
   dev:
@@ -37,6 +41,7 @@ resources:
             base_parameters:
               catalog: ${var.catalog}
               schema: ${var.schema}
+              experiment_name: ${var.experiment_name}
           environment_key: default
 
         - task_key: evaluate
@@ -73,5 +78,22 @@ resources:
         - environment_key: default
           spec:
             environment_version: '2'
+
+  schemas:
+    taxi_mlops_schema:
+      name: ${var.schema}
+      catalog_name: ${var.catalog}
+      comment: "Schema created by Databricks Asset Bundles"
+
+  experiments:
+    taxi_mlops_experiment:
+      name: ${var.experiment_name}
+
+  registered_models:
+    nyctaxi_model:
+      catalog_name: ${var.catalog}
+      schema_name: ${var.schema}
+      name: nyctaxi_model
+      comment: Registered model in Unity Catalog for ${bundle.target} deployment target
 
 

@@ -10,7 +10,7 @@ schema = dbutils.widgets.get("schema")
 
 print(f"Ingesting NYC Taxi data to catalog={catalog}, schema={schema}...")
 
-# Create schema if not exists
+# Create schema and volume if not exist
 spark.sql(f"CREATE SCHEMA IF NOT EXISTS {catalog}.{schema}")
 
 # Read from standard Databricks NYC taxi sample table
@@ -22,24 +22,22 @@ processed_df = (
     trips_df
     .filter(col("fare_amount") > 0)
     .filter(col("trip_distance") > 0)
-    .dropna(subset=["tolls_amount", "trip_distance", "fare_amount", "pickup_datetime", "dropoff_datetime", "pickup_zip", "dropoff_zip", "payment_type"])
+    .dropna(subset=["trip_distance", "fare_amount", "tpep_pickup_datetime", "tpep_dropoff_datetime", "pickup_zip", "dropoff_zip"])
     .select(
-        col("tolls_amount"),
         col("trip_distance"),
         col("fare_amount"),
-        col("pickup_datetime"),
-        col("dropoff_datetime"),
+        col("tpep_pickup_datetime"),
+        col("tpep_dropoff_datetime"),
         col("pickup_zip"),
-        col("dropoff_zip"),
-        col("payment_type")
+        col("dropoff_zip")
     )
     .limit(50000)
 )
 
 # Split into reference (baseline training data) and current (live production features)
 # The dataset contains trips from 2016. We split around mid-February.
-reference_df = processed_df.filter(col("pickup_datetime") < "2016-02-15 00:00:00")
-current_df = processed_df.filter(col("pickup_datetime") >= "2016-02-15 00:00:00").drop("fare_amount") # production features have no label initially
+reference_df = processed_df.filter(col("tpep_pickup_datetime") < "2016-02-15 00:00:00")
+current_df = processed_df.filter(col("tpep_pickup_datetime") >= "2016-02-15 00:00:00").drop("fare_amount") # production features have no label initially
 
 # Write reference table to Unity Catalog
 ref_table = f"{catalog}.{schema}.nyctaxi_reference"

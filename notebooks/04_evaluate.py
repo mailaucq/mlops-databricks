@@ -22,8 +22,8 @@ client = mlflow.MlflowClient()
 ref_table = f"{catalog}.{schema}.nyctaxi_reference"
 df = spark.table(ref_table).toPandas()
 
-NUMERIC = ["tolls_amount", "trip_distance"]
-CATEGORICAL = ["pickup_zip", "dropoff_zip", "payment_type"]
+NUMERIC = ["trip_distance"]
+CATEGORICAL = ["pickup_zip", "dropoff_zip"]
 target_col = "fare_amount"
 
 X_val = df[NUMERIC + CATEGORICAL]
